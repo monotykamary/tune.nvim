@@ -40,7 +40,8 @@ end
 
 local function spawn_tune() 
   local env = vim.loop.os_environ()
-  local cmd = { 'tune-sdk', 'rpc' }
+  -- local cmd = { 'tune-sdk', 'rpc', '--debug', 'rpc.log' }
+  local cmd = { 'tune-sdk', 'rpc'}
   if env.TUNE_PATH and #env.TUNE_PATH > 0 then
     table.insert(cmd, '--path')
     table.insert(cmd, env.TUNE_PATH)
@@ -224,6 +225,7 @@ local function tune_chat(opts, callback)
 
   render_output("...")
   -- Start streaming: first call returns an iterator id or first chunk depending on rpc design
+  local res = ''
   client.file2run(params, true, function(err, chunk)
     if err then
       vim.schedule(function()
@@ -233,7 +235,12 @@ local function tune_chat(opts, callback)
         else
           message = vim.json.encode(err)
         end
-        render_output("err: \n" .. message)
+        if res then
+          render_output(res .. "\nerr: \n" .. message)
+        else
+          render_output("err: \n" .. message)
+        end
+
         vim.api.nvim_buf_clear_namespace(bufnr, ns_id, 0, -1)
         client:stop()
       end)
@@ -243,7 +250,7 @@ local function tune_chat(opts, callback)
     if current_client[bufnr] ~= client then return end
     if not chunk then return end
     local done = chunk.done
-    local res = chunk.value or ''
+    res = chunk.value or ''
     vim.schedule(function()
       render_output(res)
     end)
