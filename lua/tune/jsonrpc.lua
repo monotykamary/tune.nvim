@@ -149,7 +149,7 @@ function Client:_on_exit(obj)
     self.iters[id] = nil
   end
   if not (obj.code == 0) then
-    vim.notify(self.errbuf, vim.log.levels.WARN)
+    -- vim.notify(self.errbuf, vim.log.levels.WARN)
   end
   self.obj = nil -- Mark as no longer running
 end

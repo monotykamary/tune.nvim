@@ -110,7 +110,6 @@ local function tune_save(opts, callback)
     response = "json"
   }, false, function(err, result)
 
-      vim.notify(vim.inspect(err))
       if err then
         vim.notify("Error giving name: " .. tostring(err), vim.log.levels.WARN)
       end
@@ -230,8 +229,10 @@ local function tune_chat(opts, callback)
     if err then
       vim.schedule(function()
         local message
-        if err.message then
-          message = err.message
+        if err.stack then
+           message = err.stack
+        elseif err.message then
+           message = err.message
         else
           message = vim.json.encode(err)
         end
