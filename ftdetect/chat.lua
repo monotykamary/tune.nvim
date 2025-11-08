@@ -7,9 +7,7 @@ vim.filetype.add({
 
 local ok, parsers = pcall(require, "nvim-treesitter.parsers")
 if ok then
-  local parser_config = parsers.get_parser_configs()
-
-  parser_config.chat = {
+  parsers.chat = {
     install_info = {
       url = "https://github.com/iovdin/tree-sitter-chat",
       --url = "~/projects/tree-sitter-chat", -- local path or git repo

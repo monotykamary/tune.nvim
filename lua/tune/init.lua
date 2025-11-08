@@ -319,8 +319,7 @@ local function setup(opts)
 
   local ok, parsers = pcall(require, 'nvim-treesitter.parsers')
   if not ok then return false end
-  local parser_config = parsers.get_parser_configs()
-  parser_config.chat = {
+  parsers.chat = {
     install_info = {
       url = 'https://github.com/iovdin/tree-sitter-chat',
       files = { 'src/parser.c' },
